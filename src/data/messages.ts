@@ -18,17 +18,31 @@ function getPhase(daysSinceQuit: number): Phase {
   return 'late';
 }
 
-function mergeMessages(base: UrgeMessage[], extra: UrgeMessage[]): UrgeMessage[] {
-  return [...base, ...extra];
+function dedupeMessages(messages: UrgeMessage[]): UrgeMessage[] {
+  const seen = new Set<string>();
+
+  return messages.filter((message) => {
+    const key = `${message.main}::${message.sub}`;
+
+    if (seen.has(key)) {
+      return false;
+    }
+
+    seen.add(key);
+    return true;
+  });
+}
+
+function getCandidates(tone: Tone, trigger: Trigger, phase: Phase): UrgeMessage[] {
+  const baseCandidates = BASE[tone][trigger][phase] ?? [];
+  const extraCandidates = EXTRA[tone]?.[trigger]?.[phase] ?? [];
+
+  return dedupeMessages([...baseCandidates, ...extraCandidates]);
 }
 
 export function getMessage(tone: Tone, trigger: Trigger, daysSinceQuit: number): UrgeMessage {
   const phase = getPhase(daysSinceQuit);
-
-  const baseCandidates = BASE[tone][trigger][phase] ?? [];
-  const extraCandidates = EXTRA[tone]?.[trigger]?.[phase] ?? [];
-
-  const candidates = mergeMessages(baseCandidates, extraCandidates);
+  const candidates = getCandidates(tone, trigger, phase);
 
   return candidates[Math.floor(Math.random() * candidates.length)];
 }
