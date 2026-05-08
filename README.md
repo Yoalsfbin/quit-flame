@@ -28,13 +28,6 @@ docker compose up --build
 # http://localhost:3001
 ```
 
-### GitHub Pages
-
-1. リポジトリをfork or clone
-2. Settings → Pages → Source: **GitHub Actions**
-3. pushすると自動デプロイ
-4. `https://<username>.github.io/quit-flame/` でアクセス
-
 ## 技術構成
 
 - React + TypeScript + Vite
