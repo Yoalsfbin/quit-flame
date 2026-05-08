@@ -6,7 +6,9 @@ interface UrgeMessage {
   sub: string;
 }
 
-const MESSAGES = messages as any;
+type MessageDb = Record<Tone, Record<Trigger, Record<Phase, UrgeMessage[]>>>;
+
+const MESSAGES = messages as MessageDb;
 
 function getPhase(daysSinceQuit: number): Phase {
   if (daysSinceQuit <= 7) return 'early';
