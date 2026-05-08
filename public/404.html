@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script>
+    var seg = location.pathname.split('/').filter(Boolean);
+    var repo = seg[0];
+    var path = '/' + seg.slice(1).join('/');
+    location.replace('/' + repo + '/?p=' + encodeURIComponent(path));
+  </script>
+</head>
+</html>
